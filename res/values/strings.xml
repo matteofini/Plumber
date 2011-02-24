@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, tubatuber!</string>
+    <string name="app_name">tubatuber</string>
+<string name="PlayActivity">Play Tab</string>
+<string name="UploadActivity">Upload Tab</string>
+
+<string name="find">cerca</string>
+
+<string name="SearchActivity">Search Activity</string>
+
+<string name="viewCountLabel">visto:</string>
+<string name="Show">Guarda</string>
+<string name="Delete">Elimina</string>
+</resources>

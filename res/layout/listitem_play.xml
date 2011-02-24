@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/ListItemPlay"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+  
+  <TextView android:id="@+id/favourites_title" 
+  	android:layout_width="150dp" android:layout_height="wrap_content" android:gravity="left"/>
+  <TextView android:id="@+id/favourites_count" 
+  	android:layout_width="150dp" android:layout_height="wrap_content" android:gravity="left" android:layout_below="@id/favourites_title"/>
+  
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/Show" android:layout_below="@id/favourites_count"/>
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/Delete" />
+</RelativeLayout>

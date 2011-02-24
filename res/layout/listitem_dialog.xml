@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<LinearLayout 
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:scrollbars="vertical"
+		android:scrollbarAlwaysDrawVerticalTrack="true">
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="100dp" android:layout_height="wrap_content" android:text="Descrizione:" android:gravity="left" android:textStyle="bold"/>
+			<TextView android:paddingLeft="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="left"/>
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="100dp" android:layout_height="wrap_content" android:text="Pubblicato il:" android:gravity="left" android:textStyle="bold"/>
+			<TextView android:paddingLeft="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="left"/>
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="100dp" android:layout_height="wrap_content" android:text="Ultimo aggiornamento:" android:gravity="left" android:textStyle="bold"/>
+			<TextView android:paddingLeft="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="left"/>
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="100dp" android:layout_height="wrap_content" android:text="Categorie:" android:gravity="left" android:textStyle="bold"/>
+			<TextView android:paddingLeft="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="left"/>
+		</TableRow>
+		
+		<TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<TextView android:layout_width="100dp" android:layout_height="wrap_content" android:text="Autore:" android:gravity="left" android:textStyle="bold"/>
+			<TextView android:paddingLeft="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="left"/>
+		</TableRow>
+		
+		<LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent">
+			<Button android:id="@+id/closeDialog" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Chiudi" />
+			<Button android:id="@+id/showVideo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Guarda il video" android:layout_toLeftOf="@id/closeDialog" />
+		</LinearLayout>
+		
+	</LinearLayout>
+</ScrollView>

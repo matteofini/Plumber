@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.app.tubatuber"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
+        <activity android:name=".tubatuber"
+                  android:label="@string/app_name"
+                  android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".PlayActivity"
+        	android:label="@string/PlayActivity">
+       	
+       	</activity>
+       	<activity android:name=".UploadActivity"
+        	android:label="@string/UploadActivity">
+       	
+       	</activity>
+       	
+       	<activity android:name=".SearchActivity"
+        	android:label="@string/SearchActivity">
+       	</activity>
+
+</application>
+    <uses-permission android:name="android.permission.INTERNET"	/>
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
+    <uses-sdk android:minSdkVersion="4" />
+
+</manifest> 
