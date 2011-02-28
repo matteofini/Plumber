@@ -115,7 +115,7 @@ public class DbHelper {
 			db.insertOrThrow("global", null, cv);
 		}
 		catch(SQLiteConstraintException e){
-			//System.out.println("Error inserting, key already present: "+cv.toString());
+			Log.println(Log.WARN, "DbH.addglobal", "key already present");
 		}
 		catch(SQLiteException e){
 			System.out.println("Error inserting "+cv.toString());
@@ -165,10 +165,10 @@ public class DbHelper {
 			db.insertOrThrow("info", null, cv);
 		}
 		catch(SQLiteConstraintException exc){
-			//System.out.println("Error inserting, key already present: "+cv.toString());
+			Log.println(Log.WARN, "DbH.addInfo", "key already present");
 		}
 		catch(SQLiteException exc){
-			System.out.println("Error inserting "+cv.toString());
+			Log.println(Log.WARN, "DbHelper.addInfo", "Error inserting "+cv.toString());
 		}
 	}
 	
@@ -232,38 +232,44 @@ public class DbHelper {
 	 ************************************************************************/
 	 
 	 
-	private void addLinks(String id, String string) {
+	private int addLinks(String id, String string) {
 		ContentValues cv = new ContentValues();
 		cv.put(VIDEOID, id);
 		cv.put("link", string);
 		try{
 			db.insertOrThrow("links", null, cv);
+			return 0;
 		}
 		catch(SQLiteConstraintException exc){
-			//System.out.println("Error inserting, key already present: "+cv.toString());
+			Log.println(Log.WARN, "DbH.addinks", "key already present");
+			return -1;
 		}
 		catch(SQLiteException exc){
 			System.out.println("Error inserting "+cv.toString());
+			return -1;
 		}
 		
 	}
 	
-	private void addThumbnails(String id, String string) {
+	private int addThumbnails(String id, String string) {
 		ContentValues cv = new ContentValues();
 		cv.put(VIDEOID, id);
 		cv.put("thumb", string);
 		try{
 			db.insertOrThrow("thumbnails", null, cv);
+			return 0;
 		}
 		catch(SQLiteConstraintException exc){
-			//System.out.println("Error inserting, key already present: "+cv.toString());
+			Log.println(Log.WARN, "DbH.addThumbs", "key already present");
+			return -1;
 		}
 		catch(SQLiteException exc){
 			System.out.println("Error inserting "+cv.toString());
+			return -1;
 		}
 	}
 
-	private void addMedia(String id, MediaLink mediaLink) {
+	private int addMedia(String id, MediaLink mediaLink) {
 		ContentValues cv = new ContentValues();
 		cv.put(VIDEOID, id);
 		cv.put("link", mediaLink.getLink());
@@ -272,18 +278,21 @@ public class DbHelper {
 		cv.put("format", mediaLink.getFormat());
 		try{
 			db.insertOrThrow("media", null, cv);
+			return 0;
 		}
 		catch(SQLiteConstraintException exc){
-			//System.out.println("Error inserting, key already present: "+cv.toString());
+			Log.println(Log.WARN, "DbH.addMedia", "key already present");
+			return -1;
 		}
 		catch(SQLiteException exc){
-			System.out.println("Error inserting "+cv.toString());
+			Log.println(Log.WARN, "DbH.addMedia", "Error inserting "+cv.toString());
+			return -1;
 		}
 	}
 	
 	public MediaLink getMedia(String id, int index){
 		MediaLink ml = new MediaLink();
-		Cursor c = db.query("media", null, "videoid="+id, null, null, null, null);
+		Cursor c = db.query("media", new String[]{"link", "type", "format", "duration"}, "videoid="+id, null, null, null, null);
 		if (c != null)
 			c.moveToFirst();
 		
@@ -296,19 +305,29 @@ public class DbHelper {
 		}
 		else return null;
 	}
+	
+	public Cursor getAllMedia(){
+		Cursor c = db.query("media", null, null, null, null, null, null);
+		if (c != null)
+			c.moveToFirst();
+		return c;
+	}
 
-	private void addCategory(String id, String string) {
+	private int addCategory(String id, String string) {
 		ContentValues cv = new ContentValues();
 		cv.put(VIDEOID, id);
 		cv.put("cat", string);
 		try{
 			db.insertOrThrow("categories", null, cv);
+			return 0;
 		}
 		catch(SQLiteConstraintException exc){
-			//System.out.println("Error inserting, key already present: "+cv.toString());
+			Log.println(Log.WARN, "DbH.addCats", "key already present");
+			return -1;
 		}
 		catch(SQLiteException exc){
 			System.out.println("Error inserting "+cv.toString());
+			return -1;
 		}
 	}
 
@@ -318,20 +337,22 @@ public class DbHelper {
 	 ************************************************************************/
 	
 	
-	public long addFavourites(String id){
+	public int addFavourites(String id){
 		ContentValues cv = new ContentValues();
 		cv.put(VIDEOID, id);
 		long res = -1;
 		try{
 			res = db.insertOrThrow("favourites", null, cv);
+			return 0;
 		}
 		catch(SQLiteConstraintException e){
-			//System.out.println("Error inserting, key already present: "+cv.toString());
+			Log.println(Log.WARN, "DbH.addFavours", "key already present");
+			return -1;
 		}
 		catch(SQLiteException e){
 			System.out.println("Error inserting "+cv.toString());
+			return -1;
 		}
-		return res;
 	}
 
 	public Cursor getFavourites() {
@@ -352,20 +373,21 @@ public class DbHelper {
 		return i;
 	}
 	
-	public long addBookmarks(String id){
+	public int addBookmarks(String id){
 		ContentValues cv = new ContentValues();
 		cv.put(VIDEOID, id);
-		long res = -1;
 		try{
-			res = db.insertOrThrow("bookmarks", null, cv);
+			db.insertOrThrow("bookmarks", null, cv);
+			return 0;
 		}
 		catch(SQLiteConstraintException e){
-			//System.out.println("Error inserting, key already present: "+cv.toString());
+			Log.println(Log.WARN, "DbH.addBookms", "key already present");
+			return -1;
 		}
 		catch(SQLiteException e){
 			System.out.println("Error inserting "+cv.toString());
+			return -1;
 		}
-		return res;
 	}
 	
 	public void setTimeBookmark(String id, int h, int m){
@@ -373,10 +395,9 @@ public class DbHelper {
 		cv.put("time", ""+h+":"+m);
 		try{
 			db.execSQL("UPDATE bookmarks SET time="+h+":"+m+" WHERE videoid="+id);
-			//res = db.update("bookmarks", cv, VIDEOID+"="+id, null);
 		}
 		catch(SQLiteConstraintException e){
-			//System.out.println("Error inserting, key already present: "+cv.toString());
+			Log.println(Log.WARN, "DbH.setTimeBookms", "key already present");
 		}
 		catch(SQLiteException e){
 			System.out.println("Error inserting "+cv.toString());

@@ -44,7 +44,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class SearchActivity extends ListActivity {
-	
 	private SAXParser sax;
 	private List<Entry> l;
 	private HashMap<String, SoftReference<Bitmap>> cacheThumbnails;
@@ -58,13 +57,12 @@ public class SearchActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		String uri = getIntent().getExtras().getString("uri");
 		try {	
 			sax = SAXParserFactory.newInstance().newSAXParser();
 			YouTubeSearchHandler ytSearchHandler = new YouTubeSearchHandler();
-			sax.parse(uri, ytSearchHandler);
 			Log.println(Log.INFO, "SearchActivity.parse", "parse "+uri);
+			sax.parse(uri, ytSearchHandler);
 			
 			/* costruisci lista dei risultati */
 			l = ytSearchHandler.getEntryList();
@@ -76,9 +74,9 @@ public class SearchActivity extends ListActivity {
 			for(int i=0;i<l.size();i++){	
 				e = l.get(i);
 				dbh.addGlobal(e.getId(), e.getUri());
-				System.out.println("\t addGlobal+"+e.toString());
+					//	Log.println(Log.INFO, "SearchActivity","\t addGlobal+"+e.toString());
 				dbh.addinfo(e);
-				System.out.println("\t addInfo+"+e.toString());
+					//	Log.println(Log.INFO, "SearchActivity","\t addInfo+"+e.toString());
 			}
 			dbh.close();
 			
@@ -96,7 +94,6 @@ public class SearchActivity extends ListActivity {
 
 	
 	public class MySearchListAdapter extends BaseAdapter{
-
 		@Override
 		public int getCount() {
 			return l.size();
@@ -236,6 +233,7 @@ public class SearchActivity extends ListActivity {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
 		int position = getListView().getPositionForView(v);
 		menu.add(position, 0, Menu.NONE, "Guarda il video");
 		menu.add(position, 1, Menu.NONE, "Aggiungi a preferiti");
@@ -245,6 +243,7 @@ public class SearchActivity extends ListActivity {
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
+		super.onContextItemSelected(item);
 		DbHelper dbh = new DbHelper(SearchActivity.this);
 		dbh.open();
 		Entry e = (Entry) getListAdapter().getItem(item.getGroupId());

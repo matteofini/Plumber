@@ -60,7 +60,6 @@ public class YouTubeSearchHandler extends DefaultHandler {
 				ml.setDuration(Integer.valueOf(attributes.getValue("duration")));
 				String str = attributes.getValue("http://gdata.youtube.com/schemas/2007", "format");
 				ml.setFormat(Integer.valueOf(str));	
-						Log.println(Log.DEBUG, "parser handler", "\t"+str);
 				e.getMedia().add(ml);
 			}
 			else if(reading.equals("thumbnail") && in_media){
@@ -81,10 +80,9 @@ public class YouTubeSearchHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
 		super.endElement(uri, localName, qName);
-		reading = "";
-		if(reading.equals("entry"))
+		if(localName.equals("entry"))
 			in_entry = false;
-		else if(reading.equals("group"))	// media:group
+		else if(localName.equals("group"))	// media:group
 			in_media = false;
 	}
 

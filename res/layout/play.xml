@@ -8,7 +8,12 @@
 	<Button android:id="@+id/SearchButton" android:text="@string/find" 
 		android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toRightOf="@id/AutoCompleteTextView01"/>
 	
-	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/AutoCompleteTextView01"
+	<TextView android:id="@+id/label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/AutoCompleteTextView01"
 		android:text="Preferiti" android:textStyle="bold"/>
-		
+	
+	<ListView android:layout_below="@id/label"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/android:list">
+</ListView>
 </RelativeLayout>
