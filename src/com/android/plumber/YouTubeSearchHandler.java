@@ -45,11 +45,18 @@ public class YouTubeSearchHandler extends DefaultHandler {
 					e.getCats().add(term);
 			}
 			else if(reading.equals("link")){
+				Link l = new Link();	
 				String rel = attributes.getValue("rel");
+				String href = attributes.getValue("href");
+				String type = attributes.getValue("type");
 				if(rel.equals("self"))
-					e.setUri(attributes.getValue("href"));
-				else
-					e.getLinks().add(attributes.getValue("href"));	
+					e.setUri(href);
+				else{
+					l.setRel(rel);
+					l.setHref(href);
+					l.setType(type);
+					e.getLinks().add(l);
+				}
 			}
 			else if(reading.equals("group")){	// media:group
 				in_media = true;
@@ -60,6 +67,7 @@ public class YouTubeSearchHandler extends DefaultHandler {
 				ml.setDuration(Integer.valueOf(attributes.getValue("duration")));
 				String str = attributes.getValue("http://gdata.youtube.com/schemas/2007", "format");
 				ml.setFormat(Integer.valueOf(str));	
+				ml.setType(attributes.getValue("type"));
 				e.getMedia().add(ml);
 			}
 			else if(reading.equals("thumbnail") && in_media){

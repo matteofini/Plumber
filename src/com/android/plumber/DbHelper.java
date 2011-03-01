@@ -29,26 +29,26 @@ public class DbHelper {
 		"create table favourites ("+VIDEOID+" text unique not null references global ("+VIDEOID+"));";	
 	
 	private static final String DB2_CREATE = 
-		"create table info ("+VIDEOID+" text unique not null references global (videoid)," +
+		"create table info ("+VIDEOID+" text unique not null references global ("+VIDEOID+") on delete cascade," +
 				"title text not null, content text, published text not null, updated text not null," +
 				"uri text not null, author_name text not null, author_uri text not null," +
 				"count integer not null);";	
 	
 	private static final String CATS_CREATE = 
-		"create table categories ("+VIDEOID+" text not null references global ("+VIDEOID+"), cat text unique not null);";
+		"create table categories ("+VIDEOID+" text not null references global ("+VIDEOID+") on delete cascade, cat text unique not null);";
 
 	private static final String MEDIA_CREATE = 
-		"create table media ("+VIDEOID+" text not null references global ("+VIDEOID+"), link text unique not null, type text not null, format integer not null, duration integer not null);";
+		"create table media ("+VIDEOID+" text not null references global ("+VIDEOID+") on delete cascade, link text unique not null, type text not null, format integer not null, duration integer not null);";
 	
 	private static final String THUMBS_CREATE = 
-		"create table thumbnails ("+VIDEOID+" text not null references global ("+VIDEOID+"), thumb text unique not null);";
+		"create table thumbnails ("+VIDEOID+" text not null references global ("+VIDEOID+") on delete cascade, thumb text unique not null);";
 	
 	private static final String LINKS_CREATE = 
-		"create table links ("+VIDEOID+" text not null references global ("+VIDEOID+"), link text unique not null);";
+		"create table links ("+VIDEOID+" text not null references global ("+VIDEOID+") on delete cascade, rel text unique not null, href text not null, type text not null);";
 	
 	
 	private static final String DB3_CREATE = 
-		"create table bookmarks ("+VIDEOID+" text unique not null references global ("+VIDEOID+"), time text default NULL);";
+		"create table bookmarks ("+VIDEOID+" text unique not null references global ("+VIDEOID+") on delete cascade, time text default NULL);";
 	
 	private class MySQLiteOpenHelper extends SQLiteOpenHelper{
 
@@ -147,22 +147,21 @@ public class DbHelper {
 		cv.put("author_name", e.getAuthor().getName());
 		cv.put("author_uri", e.getAuthor().getUri());
 		cv.put("count", e.getViewCount());
-		
-		for(int i=0;i<e.getCats().size();i++){
-			addCategory(e.getId(), e.getCats().get(i));
-		}
-		for(int i=0;i<e.getMedia().size();i++){
-			addMedia(e.getId(), e.getMedia().get(i));
-		}
-		for(int i=0;i<e.getThumbs().size();i++){
-			addThumbnails(e.getId(), e.getThumbs().get(i));
-		}
-		for(int i=0;i<e.getLinks().size();i++){
-			addLinks(e.getId(), e.getLinks().get(i));
-		}
-		
 		try{
 			db.insertOrThrow("info", null, cv);
+			
+			for(int i=0;i<e.getCats().size();i++){
+				addCategory(e.getId(), e.getCats().get(i));
+			}
+			for(int i=0;i<e.getMedia().size();i++){
+				addMedia(e.getId(), e.getMedia().get(i));
+			}
+			for(int i=0;i<e.getThumbs().size();i++){
+				addThumbnails(e.getId(), e.getThumbs().get(i));
+			}
+			for(int i=0;i<e.getLinks().size();i++){
+				addLinks(e.getId(), e.getLinks().get(i));
+			}
 		}
 		catch(SQLiteConstraintException exc){
 			Log.println(Log.WARN, "DbH.addInfo", "key already present");
@@ -232,10 +231,12 @@ public class DbHelper {
 	 ************************************************************************/
 	 
 	 
-	private int addLinks(String id, String string) {
+	private int addLinks(String id, Link l) {
 		ContentValues cv = new ContentValues();
 		cv.put(VIDEOID, id);
-		cv.put("link", string);
+		cv.put("rel", l.getRel());
+		cv.put("href", l.getHref());
+		cv.put("type", l.getType());
 		try{
 			db.insertOrThrow("links", null, cv);
 			return 0;
@@ -248,7 +249,37 @@ public class DbHelper {
 			System.out.println("Error inserting "+cv.toString());
 			return -1;
 		}
-		
+	}
+	
+	public Link getLink(String id, int index){
+		return 	getLink(id, null, index);
+	}
+	
+	public Link getLink(String id, String rel){
+		return getLink(id, rel, -1);
+	}
+	
+	private Link getLink(String id, String rel, int index){
+		Link l = new Link();
+		Cursor c;
+		if(rel==null){	// return link at index position
+			c = db.query("link", new String[]{"rel", "href", "type"}, "videoid="+"'"+id+"'", null, null, null, null);
+			if(c!=null)
+				c.moveToFirst();
+			c.moveToPosition(index);
+			l.setRel(c.getString(0));
+			l.setHref(c.getString(1));
+			l.setType(c.getString(2));
+		}
+		else{	// return link whose related attribute is contains rel
+			c = db.query("links",  new String[]{"rel", "href", "type"}, "videoid='"+id+"' and rel like '%"+rel+"%'", null, null, null, null);
+			if(c!=null)
+				c.moveToFirst();
+			l.setRel(c.getString(0));
+			l.setHref(c.getString(1));
+			l.setType(c.getString(2));
+		}
+		return l;
 	}
 	
 	private int addThumbnails(String id, String string) {
@@ -281,7 +312,7 @@ public class DbHelper {
 			return 0;
 		}
 		catch(SQLiteConstraintException exc){
-			Log.println(Log.WARN, "DbH.addMedia", "key already present");
+			Log.println(Log.WARN, "DbH.addMedia", "key already present "+cv.toString());
 			return -1;
 		}
 		catch(SQLiteException exc){
@@ -292,7 +323,7 @@ public class DbHelper {
 	
 	public MediaLink getMedia(String id, int index){
 		MediaLink ml = new MediaLink();
-		Cursor c = db.query("media", new String[]{"link", "type", "format", "duration"}, "videoid="+id, null, null, null, null);
+		Cursor c = db.query("media", new String[]{"link", "type", "format", "duration"}, "videoid="+"'"+id+"'", null, null, null, null);
 		if (c != null)
 			c.moveToFirst();
 		
@@ -304,13 +335,6 @@ public class DbHelper {
 			return ml;
 		}
 		else return null;
-	}
-	
-	public Cursor getAllMedia(){
-		Cursor c = db.query("media", null, null, null, null, null, null);
-		if (c != null)
-			c.moveToFirst();
-		return c;
 	}
 
 	private int addCategory(String id, String string) {

@@ -73,7 +73,7 @@ public class PlayActivity extends ListActivity {
 		 * http://gdata.youtube.com/feeds/api/users/username/uploads
 		 */ 
 		c_fav = dbh.getFavourites();
-		//setListAdapter(new MyPlayListAdapter());
+		setListAdapter(new MyPlayListAdapter());
 		//startManagingCursor(c_fav);
 		dbh.close();
 	}
@@ -126,24 +126,26 @@ public class PlayActivity extends ListActivity {
 				public void onClick(View v) {
 					DbHelper dbh = new DbHelper(PlayActivity.this);
 					dbh.open();
-					
-					//MediaLink media = dbh.getMedia(id, 0);	// link web
-					Cursor c = dbh.getAllMedia();
-					System.out.println("\t"+c.getString(0));
-					
-					/*Intent i = new Intent();
+					//MediaLink media = dbh.getMedia(id, 1);	// link web;
+					Link link = dbh.getLink(id, "mobile");
+					Intent i = new Intent();
 					i.setAction(Intent.ACTION_VIEW);
 					i.addCategory(Intent.CATEGORY_BROWSABLE);
-					i.setData(Uri.parse(media.getLink()));
-					startActivity(i);*/
+					String uri = link.getHref();
+					i.setData(Uri.parse(uri));
+						Log.println(Log.INFO, "PlayActivity", "watch video "+uri);
+					startActivity(i);
 					dbh.close();
 				}
 			});
 			delete.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					DbHelper dbh = new DbHelper(PlayActivity.this);
+					dbh.open();
 					if(dbh.deleteFavourites(id)<=0)
 						Log.println(Log.DEBUG, "DeleteFavourites", "deleted 0 rows or an error occurred");
+					dbh.close();
 				}
 			});
 			dbh.close();

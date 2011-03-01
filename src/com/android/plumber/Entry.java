@@ -11,7 +11,7 @@ public class Entry{
 		media = new ArrayList<MediaLink>(0);
 		thumbs = new ArrayList<String>(0);
 		author = new Author();
-		links = new ArrayList<String>(0);
+		links = new ArrayList<Link>(0);
 	}
 	
 	private String id;
@@ -20,7 +20,7 @@ public class Entry{
 	private Date published;
 	private Date updated;
 	private List<String> cats;
-	private List<String> links;
+	private List<Link> links;
 	private String uri;
 	private Author author;
 	private List<MediaLink> media;
@@ -60,7 +60,7 @@ public class Entry{
 	public int getViewCount() {
 		return viewCount;
 	}
-	public List<String> getLinks() {
+	public List<Link> getLinks() {
 		return links;
 	}
 	public void setId(String id) {
@@ -81,7 +81,7 @@ public class Entry{
 	public void setCats(List<String> cats) {
 		this.cats = cats;
 	}
-	public void setLinks(List<String> links) {
+	public void setLinks(List<Link> links) {
 		this.links = links;
 	}
 	public void setUri(String uri) {
