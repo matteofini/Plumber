@@ -152,7 +152,7 @@ public class SearchActivity extends ListActivity {
 			return ll;
 		} 	
 
-		private BitmapDrawable getThumbnail(String uri) {
+		public BitmapDrawable getThumbnail(String uri) {
 			BitmapDrawable d = null;
 			if(cacheThumbnails.get(uri)==null){
 				try {

@@ -1,10 +1,16 @@
 package com.android.plumber;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+
 import javax.xml.parsers.FactoryConfigurationError;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -115,27 +122,36 @@ public class PlayActivity extends ListActivity {
 			TextView count = (TextView) v.findViewById(R.id.favourites_count);
 			Button show = (Button) v.findViewById(R.id.buttonShow);
 			Button delete = (Button) v.findViewById(R.id.buttonDel);
+			ImageView img = (ImageView) v.findViewById(R.id.thumb);
 			
 			c_fav.moveToPosition(position);
 			final String id = c_fav.getString(0);
+			
+			try {
+				String img_uri = dbh.getThumbs(id);
+				BitmapDrawable bitmap;
+				bitmap = new BitmapDrawable(getResources(), new URL(img_uri).openStream());
+				img.setImageDrawable(bitmap);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			title.setText(dbh.getTitle(id));
 			count.setText(getString(R.string.viewCountLabel)+": "+dbh.getViewCount(id)+"");
 			
 			show.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					DbHelper dbh = new DbHelper(PlayActivity.this);
-					dbh.open();
-					//MediaLink media = dbh.getMedia(id, 1);	// link web;
-					Link link = dbh.getLink(id, "mobile");
 					Intent i = new Intent();
 					i.setAction(Intent.ACTION_VIEW);
 					i.addCategory(Intent.CATEGORY_BROWSABLE);
-					String uri = link.getHref();
+					String uri = "http://m.youtube.com/watch?v="+id;
 					i.setData(Uri.parse(uri));
 						Log.println(Log.INFO, "PlayActivity", "watch video "+uri);
 					startActivity(i);
-					dbh.close();
+
 				}
 			});
 			delete.setOnClickListener(new OnClickListener() {

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/ListItemPlay"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content" android:orientation="vertical">
-  
-  <TextView android:id="@+id/favourites_title" 
-  	android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="left"/>
-  <TextView android:id="@+id/favourites_count" 
-  	android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="left" android:layout_below="@id/favourites_title"/>
-  <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
-  	android:layout_height="wrap_content">
-		<Button android:id="@+id/buttonShow" 
-			android:layout_width="wrap_content" android:layout_height="wrap_content" 
-			android:text="@string/Show" android:layout_below="@id/favourites_count"/>
-  		<Button android:id="@+id/buttonDel"
-  			android:layout_width="wrap_content" android:layout_height="wrap_content" 
-  			android:text="@string/Delete" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="horizontal"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+	<ImageView android:id="@+id/thumb" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+	<LinearLayout android:id="@+id/ListItemPlay" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+	  <TextView android:id="@+id/favourites_title" 
+	  	android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="left"/>
+	  <TextView android:id="@+id/favourites_count" 
+	  	android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="left"/>
+	  <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content"
+	  	android:layout_height="wrap_content">
+			<Button android:id="@+id/buttonShow" 
+				android:layout_width="wrap_content" android:layout_height="wrap_content" 
+				android:text="@string/Show" android:layout_below="@id/favourites_count"/>
+	  		<Button android:id="@+id/buttonDel"
+	  			android:layout_width="wrap_content" android:layout_height="wrap_content" 
+	  			android:text="@string/Delete" />
+		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>

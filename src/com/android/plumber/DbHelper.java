@@ -299,6 +299,12 @@ public class DbHelper {
 			return -1;
 		}
 	}
+	
+	public String getThumbs(String id){
+		Cursor c = db.query("thumbnails", new String[]{"thumb"}, "videoid='"+id+"'", null, null, null, null);
+		c.moveToFirst();
+		return c.getString(0);
+	}
 
 	private int addMedia(String id, MediaLink mediaLink) {
 		ContentValues cv = new ContentValues();
